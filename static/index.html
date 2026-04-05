@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Compose</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="topbar">
+        <div class="logo">
+            <span class="logo-dot"></span>
+            Mail Compose
+        </div>
+        <div class="actions">
+            <button class="ghost">Save Draft</button>
+            <button class="primary">Send</button>
+        </div>
+    </header>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <nav>
+                <a class="active">Compose</a>
+                <a>Inbox</a>
+                <a>Starred</a>
+                <a>Sent</a>
+                <a>Drafts</a>
+                <a>Trash</a>
+            </nav>
+        </aside>
+
+        <main class="compose">
+            <section class="fields">
+                <div class="row">
+                    <label for="toInput">To</label>
+                    <input id="toInput" type="text" placeholder="recipient@example.com">
+                </div>
+                <div class="row">
+                    <label for="ccInput">Cc</label>
+                    <input id="ccInput" type="text" placeholder="cc@example.com">
+                </div>
+                <div class="row">
+                    <label for="subjectInput">Subject</label>
+                    <input id="subjectInput" type="text" placeholder="Quarterly update...">
+                </div>
+            </section>
+
+            <section class="body-area">
+                <div class="body-toolbar">
+                    <span>Message</span>
+                    <span id="charCount" class="muted">0 characters</span>
+                </div>
+                <div class="editor-shell">
+                    <div
+                        id="bodyInput"
+                        class="body-editor"
+                        contenteditable="true"
+                        spellcheck="false"
+                        data-placeholder="Start typing your email..."
+                    ></div>
+                </div>
+                <div id="toxWarning" class="tox-warning hidden">⚠️ Toxic content detected</div>
+                <div id="suggestDropdown" class="suggest-dropdown hidden"></div>
+            </section>
+
+            <section class="analysis">
+                <div class="analysis-header">
+                    <h3>AI Analysis</h3>
+                    <button id="toggleAnalysis" class="ghost">Expand</button>
+                </div>
+                <div id="analysisPanel" class="analysis-panel collapsed">
+                    <div class="metric">
+                        <span class="label">Toxicity Score</span>
+                        <span id="toxicityScore" class="value">–</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Sentiment</span>
+                        <span id="sentimentLabel" class="value">–</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Detailed Scores</span>
+                        <div id="detailedScores" class="score-list"></div>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Detected Toxic Words</span>
+                        <div id="toxicWords" class="chip-list"></div>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Recommendations</span>
+                        <ul id="recommendations" class="reco-list"></ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
