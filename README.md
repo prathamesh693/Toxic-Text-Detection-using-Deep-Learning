@@ -1,76 +1,78 @@
 
-# Toxic-Text-Detection
-Toxic texts and abuses can affect a person mentally. In order to tackle that I have developed this project.
+# Toxic Text Detector using Deep Learning
 
-This repository consists of a web application which can classify between toxic and non-toxic texts. It uses advanced deep learning models to classify the text.
+A toxicity detection project that combines a FastAPI backend, a Hugging Face toxic-text model, a web demo, and a Chrome extension for real-time toxic text monitoring.
 
-## Live Demo
+## Overview
 
-Once you've set up the project following the installation instructions below, you can access the live demo at:
-- http://localhost:8000/static/index.html
+This repository includes:
+- `main.py`: FastAPI app serving a toxic text detection API using the pre-trained model `unitary/toxic-bert`
+- `static/`: Web UI demo for text analysis and feedback
+- `chrome-extension/`: Manifest V3 Chrome extension that detects toxic text live while typing and proxies requests to the local API
+- `Machine Learning/`: Notebooks and training artifacts used during model exploration and development
 
-The web interface allows you to:
-- Enter any text to analyze
-- Get instant toxicity detection results
-- View detailed toxicity scores across multiple categories
+The project is designed for moderation, content quality control, and safe communication by identifying toxicity, insults, threats, and rude language.
 
-## Dataset
+## Key Features
 
-The dataset was acquired from **Kaggle's Toxic Comment Classification Challenge**. <br>
-**Link:** https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge/data
+- Real-time toxicity detection via a FastAPI backend
+- Multi-label toxicity scoring across categories:
+  - `toxicity`
+  - `severe_toxicity`
+  - `obscene`
+  - `threat`
+  - `insult`
+  - `identity_attack`
+- Web demo interface for fast testing
+- Chrome extension with highlight styles, badge alerts, and API health checks
+- Suggestion endpoint for tone and spelling improvements
+- Local model serving with `unitary/toxic-bert`
 
-## Implementation Options
+## Repository Structure
 
-### 1. Custom LSTM Model
-The project initially used a deep learning LSTM model for classification of text. This custom model has an accuracy of **96%** on test data.
+```
+.
+├── README.md
+├── main.py
+├── requirements.txt
+├── static/
+│   ├── index.html
+│   ├── script.js
+│   ├── styles.css
+├── chrome-extension/
+│   ├── manifest.json
+│   ├── background.js
+│   ├── content.js
+│   ├── popup.html
+│   ├── popup.js
+│   ├── popup.css
+│   └── style.css
+└── Machine Learning/
+    ├── Data_Exploration.ipynb
+    ├── Data_Preprocessing.ipynb
+    ├── model_training.ipynb
+    ├── preprocessed_text.csv
+    ├── train.csv
+    └── LSTM_toxic_prediction_model.h5
+```
 
-### 2. Pre-trained Transformer Model (New)
-The project now also supports using a pre-trained transformer model from Hugging Face (`unitary/toxic-bert`). This model provides:
-- More detailed toxicity analysis (toxicity, severe toxicity, obscene, threat, insult, identity attack)
-- State-of-the-art performance without additional training
-- Regular updates from the model provider
+## Prerequisites
 
-## API Service
-The project now includes a FastAPI implementation that allows you to use the toxic text detection model as an API service. This enables integration with:
-- Chat applications
-- Content moderation systems
-- Social media platforms
-- Games and interactive applications
+- Python 3.7+
+- `pip`
+- Internet access for downloading the Hugging Face model on first run
 
-### API Endpoints
-- `/predict` - Analyze a single text for toxicity
-- `/predict_batch` - Analyze multiple texts at once
-- `/health` - Check API health status
-- Web interface at `/static/index.html` for easy testing
+## Installation
 
-## Repository Details:
-- **Machine Learning folder**: Contains all the operations performed to build the original LSTM model, including data exploration, preprocessing, and model training.
-- **main.py**: FastAPI implementation for serving the pre-trained model.
-- **static folder**: Contains the web interface for testing the API.
-- **requirements.txt**: Lists all dependencies needed to run the API.
-
-## How to Run This Project
-
-### Prerequisites
-- Python 3.7 or higher
-- pip (Python package installer)
-
-### Installation and Setup
-1. Clone this repository or download it as a ZIP file:
+1. Open a terminal in the project folder:
    ```bash
-   git 
-   cd Toxic-Text-Detection
+   cd "R:\Projects\2_Deep_Learning_Projects\Toxic Text Detector using Deep Learning"
    ```
 
-2. Create and activate a virtual environment (optional but recommended):
+2. Create and activate a virtual environment (recommended):
    ```bash
-   # On Windows
    python -m venv venv
    venv\Scripts\activate
-
-   # On macOS/Linux
-   python -m venv venv
-   source venv/bin/activate
    ```
 
 3. Install dependencies:
@@ -78,44 +80,106 @@ The project now includes a FastAPI implementation that allows you to use the tox
    pip install -r requirements.txt
    ```
 
-### Running the FastAPI Application
-1. Start the FastAPI server:
-   ```bash
-   python main.py
-   ```
-   The server will start at http://localhost:8000
+## Running the API
 
-2. Access the application:
-   - Web interface: http://localhost:8000/static/index.html
-   - API documentation: http://localhost:8000/docs
-   - API endpoints directly: http://localhost:8000/predict (POST request)
+Start the FastAPI server:
 
-### Using the API
-1. Using the web interface:
-   - Open http://localhost:8000/static/index.html in your browser
-   - Enter text in the input field
-   - Click "Check Text" to analyze
+```bash
+python main.py
+```
 
-2. Using the API directly (with curl):
-   ```bash
-   curl -X POST "http://localhost:8000/predict" -H "Content-Type: application/json" -d "{\"text\":\"Your text to analyze\"}"
-   ```
+The app launches on:
 
-3. Using the batch API (for multiple texts):
-   ```bash
-   curl -X POST "http://localhost:8000/predict_batch" -H "Content-Type: application/json" -d "{\"texts\":[\"First text\", \"Second text\"]}"
-   ```
+- `http://localhost:8000`
+- `http://localhost:8000/static/index.html` for the web demo
+- `http://localhost:8000/docs` for interactive API docs
 
-### Running the Original LSTM Model (Optional)
-If you want to use the original LSTM model instead of the pre-trained model:
+## API Endpoints
 
-1. Modify the `main.py` file to use the LSTM model:
-   - Comment out the Hugging Face model loading code
-   - Uncomment the LSTM model loading code
-   - Update the prediction function to use the LSTM model
+### `GET /`
+Returns a welcome message and endpoint summary.
 
-2. Run the application as described above
+### `GET /health`
+Returns health status and model metadata.
+
+### `POST /predict`
+Analyze a single text for toxicity.
+
+Request body:
+
+```json
+{ "text": "Your text here" }
+```
+
+### `POST /predict_batch`
+Analyze multiple texts in one request.
+
+Request body:
+
+```json
+{ "texts": ["Text one", "Text two"] }
+```
+
+### `POST /predict_toxicity`
+Returns toxicity scores plus toxic spans and sentiment.
+
+### `POST /suggest_words`
+Returns tone and spelling suggestions based on text input.
+
+## Web Demo
+
+Open `http://localhost:8000/static/index.html` in your browser to test the app locally. The demo provides:
+
+- live toxicity scoring
+- sentiment feedback
+- detected toxic words
+- suggested improvements
+- detailed per-label scores
+
+## Chrome Extension
+
+The Chrome extension is located in `chrome-extension/` and is built to work with the local API.
+
+### Install the extension
+
+1. Start the API server: `python main.py`
+2. Open Chrome and go to `chrome://extensions`
+3. Enable **Developer mode**
+4. Click **Load unpacked**
+5. Select the `chrome-extension/` folder
+6. Pin the extension if desired
+
+### What it does
+
+- monitors text fields on web pages
+- highlights toxic text in real time
+- updates badge state for toxic detection
+- shows API health status in the popup
+- remembers highlight style and pause state
 
 ## Notes
-- The original LSTM model was designed as a multilabel classifier but simplified to binary classification due to label bias issues.
-- The pre-trained model provides more detailed toxicity categories while maintaining high accuracy.
+
+- The current backend uses `unitary/toxic-bert` from Hugging Face.
+- The `Machine Learning/` folder contains the original training notebooks and the legacy LSTM artifact.
+- The extension uses a service worker proxy to send requests to `http://localhost:8000` and avoid CORS issues.
+
+## Troubleshooting
+
+- If the extension shows API offline, make sure `python main.py` is running.
+- If the model takes time to respond on first launch, allow a short warm-up for the transformer model.
+- For any dependency issues, verify that `requirements.txt` is installed in the active environment.
+
+## Dependencies
+
+Core packages in `requirements.txt`:
+
+- `fastapi`
+- `uvicorn`
+- `transformers`
+- `torch`
+- `pydantic`
+- `python-multipart`
+
+## License
+
+This repository is intended for educational and experimentation purposes.
