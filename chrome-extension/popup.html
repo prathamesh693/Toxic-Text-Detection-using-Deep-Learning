@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toxic Text Detector</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="popup-container">
+
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="popup-logo">
+        <img src="icons/icon128.png" alt="Shield" class="popup-logo-img" />
+        <div class="popup-title-group">
+          <h1 class="popup-title">Toxic Text Detector</h1>
+          <span class="popup-version">v1.0.0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Status Card -->
+    <div class="status-card" id="statusCard">
+      <div class="status-row">
+        <div class="status-info">
+          <span class="status-dot" id="statusDot"></span>
+          <span class="status-text" id="statusText">Protection Active</span>
+        </div>
+        <label class="toggle-switch" id="toggleLabel" aria-label="Toggle toxic detection">
+          <input type="checkbox" id="toggleSwitch" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+      <div class="stat-card">
+        <div class="stat-icon">🔍</div>
+        <div class="stat-value" id="scanCount">0</div>
+        <div class="stat-label">Scans</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-value" id="toxicCount">0</div>
+        <div class="stat-label">Detected</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value" id="accuracyValue">—</div>
+        <div class="stat-label">Score</div>
+      </div>
+    </div>
+
+    <!-- Highlight Style Selector -->
+    <div class="settings-section">
+      <h2 class="section-title">Highlight Style</h2>
+      <div class="style-options" id="styleOptions">
+        <button class="style-btn active" data-style="background" id="styleBtnBackground" title="Background highlight">
+          <span class="style-preview style-preview-bg"></span>
+          <span>Background</span>
+        </button>
+        <button class="style-btn" data-style="underline" id="styleBtnUnderline" title="Underline highlight">
+          <span class="style-preview style-preview-underline"></span>
+          <span>Underline</span>
+        </button>
+        <button class="style-btn" data-style="color" id="styleBtnColor" title="Text color highlight">
+          <span class="style-preview style-preview-color"></span>
+          <span>Color</span>
+        </button>
+        <button class="style-btn" data-style="border" id="styleBtnBorder" title="Border glow highlight">
+          <span class="style-preview style-preview-border"></span>
+          <span>Border</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- API Status -->
+    <div class="api-status" id="apiStatus">
+      <span class="api-dot api-dot-checking" id="apiDot"></span>
+      <span class="api-text" id="apiText">Checking API...</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="popup-footer">
+      <span>Powered by <strong>Toxic-BERT</strong> AI Model</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
