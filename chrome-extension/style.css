@@ -1,0 +1,189 @@
+/**
+ * style.css — Content Script Styles
+ * 
+ * Injected into every page. Provides visual feedback for toxic text detection.
+ * Uses scoped class names prefixed with "ttd-" to avoid conflicts with host pages.
+ */
+
+/* ─── Highlight Styles ─────────────────────────────────────────────────────── */
+
+/* Background highlight (default) */
+.ttd-toxic-background {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  box-shadow: inset 0 0 0 2px rgba(239, 68, 68, 0.4) !important;
+  border-radius: 4px !important;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Underline highlight */
+.ttd-toxic-underline {
+  text-decoration: underline wavy rgba(239, 68, 68, 0.8) !important;
+  text-underline-offset: 3px !important;
+  transition: text-decoration 0.3s ease !important;
+}
+
+/* Text color highlight */
+.ttd-toxic-color {
+  color: #DC2626 !important;
+  transition: color 0.3s ease !important;
+}
+
+/* Border glow highlight */
+.ttd-toxic-border {
+  outline: 2px solid rgba(239, 68, 68, 0.6) !important;
+  outline-offset: 1px !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.25) !important;
+  border-radius: 4px !important;
+  transition: outline 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* ─── Tooltip ──────────────────────────────────────────────────────────────── */
+
+.ttd-tooltip {
+  position: fixed !important;
+  z-index: 2147483647 !important;
+  padding: 10px 16px !important;
+  border-radius: 10px !important;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  transform: translateY(4px) !important;
+  transition: opacity 0.25s ease, transform 0.25s ease !important;
+  max-width: 320px !important;
+  box-sizing: border-box !important;
+
+  /* Glassmorphism dark theme */
+  background: rgba(20, 20, 35, 0.92) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset !important;
+  color: #F1F5F9 !important;
+}
+
+.ttd-tooltip.ttd-tooltip-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.ttd-tooltip-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 6px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: #F87171 !important;
+}
+
+.ttd-tooltip-icon {
+  font-size: 16px !important;
+  line-height: 1 !important;
+}
+
+.ttd-tooltip-body {
+  font-size: 12px !important;
+  color: #CBD5E1 !important;
+  line-height: 1.45 !important;
+}
+
+.ttd-tooltip-score {
+  display: inline-block !important;
+  margin-top: 6px !important;
+  padding: 3px 10px !important;
+  border-radius: 20px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #FCA5A5 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+.ttd-tooltip-categories {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  margin-top: 8px !important;
+}
+
+.ttd-tooltip-category {
+  padding: 2px 8px !important;
+  border-radius: 12px !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  background: rgba(139, 92, 246, 0.2) !important;
+  color: #C4B5FD !important;
+  border: 1px solid rgba(139, 92, 246, 0.25) !important;
+}
+
+/* ─── Status Indicator (floating pill) ─────────────────────────────────────── */
+
+.ttd-status-indicator {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 2147483646 !important;
+  padding: 8px 16px !important;
+  border-radius: 24px !important;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  pointer-events: none !important;
+
+  background: rgba(20, 20, 35, 0.9) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3) !important;
+  color: #E2E8F0 !important;
+
+  opacity: 0 !important;
+  transform: translateY(10px) !important;
+  transition: opacity 0.35s ease, transform 0.35s ease !important;
+}
+
+.ttd-status-indicator.ttd-status-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.ttd-status-dot {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+}
+
+.ttd-status-dot-toxic {
+  background: #EF4444 !important;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6) !important;
+  animation: ttd-pulse 1.5s ease-in-out infinite !important;
+}
+
+.ttd-status-dot-safe {
+  background: #10B981 !important;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5) !important;
+}
+
+@keyframes ttd-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(239, 68, 68, 0.6); }
+  50%      { opacity: 0.5; box-shadow: 0 0 16px rgba(239, 68, 68, 0.9); }
+}
+
+/* ─── Smooth transitions when removing toxic state ─────────────────────────── */
+
+.ttd-clearing {
+  transition: all 0.4s ease !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  text-decoration: none !important;
+}
