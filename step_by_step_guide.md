@@ -15,7 +15,7 @@ pip install -r requirements.txt
 > Your `requirements.txt` needs `fastapi`, `uvicorn`, `transformers`, `torch`, and `pydantic`. If any are missing, install them:
 > ```bash
 > pip install fastapi uvicorn transformers torch pydantic
-> ```
+> ``` 
 
 ---
 
